@@ -17,7 +17,7 @@ build:
   skip: true  # [win]
 
 requirements:
-  build:
+  host:
     - python
     - setuptools
   run:
