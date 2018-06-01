@@ -11,9 +11,11 @@ source:
   fn: {{ name }}-{{ version }}.tar.gz
   url: https://pypi.io/packages/source/{{ pypi[0] }}/{{ pypi }}/{{ pypi }}-{{ version }}.tar.gz
   sha256: {{ sha256 }}
+  patches:
+    - 0001-Add-missing-libarchive-flags.patch
 
 build:
-  number: 2
+  number: 3
 
 requirements:
   host:

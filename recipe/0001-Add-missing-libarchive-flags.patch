@@ -1,0 +1,33 @@
+From 4784e43a9ca7835cdfbceba718a527e1f8033447 Mon Sep 17 00:00:00 2001
+From: Kirill Isakov <ukwt@ya.ru>
+Date: Sun, 14 May 2017 16:14:09 +0600
+Subject: [PATCH] Add missing libarchive flags, some security tests
+
+* Add missing flags supported by libarchive:
+    - EXTRACT_SECURE_NOABSOLUTEPATHS;
+    - EXTRACT_CLEAR_NOCHANGE_FFLAGS;
+
+* Add some tests for security options:
+    - EXTRACT_SECURE_NODOTDOT;
+    - EXTRACT_SECURE_NOABSOLUTEPATHS.
+---
+ libarchive/extract.py        |   2 ++
+ tests/data/flags.tar         | Bin 0 -> 10240 bytes
+ tests/test_security_flags.py |  32 ++++++++++++++++++++++++++++++++
+ 3 files changed, 34 insertions(+)
+ create mode 100644 tests/data/flags.tar
+ create mode 100644 tests/test_security_flags.py
+
+diff --git a/libarchive/extract.py b/libarchive/extract.py
+index f7c7b90..8b7a17a 100644
+--- a/libarchive/extract.py
++++ b/libarchive/extract.py
+@@ -26,6 +26,8 @@
+ EXTRACT_MAC_METADATA = 0x2000
+ EXTRACT_NO_HFS_COMPRESSION = 0x4000
+ EXTRACT_HFS_COMPRESSION_FORCED = 0x8000
++EXTRACT_SECURE_NOABSOLUTEPATHS = 0x10000
++EXTRACT_CLEAR_NOCHANGE_FFLAGS = 0x20000
+ 
+ 
+ @contextmanager
