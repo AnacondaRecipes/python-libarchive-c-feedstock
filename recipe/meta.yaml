@@ -11,9 +11,11 @@ source:
   fn: {{ name }}-{{ version }}.tar.gz
   url: https://pypi.io/packages/source/{{ pypi[0] }}/{{ pypi }}/{{ pypi }}-{{ version }}.tar.gz
   sha256: {{ sha256 }}
+  patches:
+    - 0001-Add-zstd-support.patch
 
 build:
-  number: 3
+  number: 4
 
 requirements:
   host:
