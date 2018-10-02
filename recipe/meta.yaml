@@ -13,10 +13,9 @@ source:
   sha256: {{ sha256 }}
   patches:
     - 0001-Add-zstd-support.patch
-    - 0002-Export-ArchiveWrite.patch
 
 build:
-  number: 6
+  number: 7
 
 requirements:
   host:
