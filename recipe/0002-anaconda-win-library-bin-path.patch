@@ -1,0 +1,37 @@
+From cd281bd9fb395e6e2f078404aa8159e3ce4f86ec Mon Sep 17 00:00:00 2001
+From: Mike Sarahan <msarahan@gmail.com>
+Date: Mon, 1 Jul 2019 09:35:31 -0500
+Subject: [PATCH] anaconda win library bin path
+
+---
+ libarchive/ffi.py | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/libarchive/ffi.py b/libarchive/ffi.py
+index 755eb71..6903a75 100644
+--- a/libarchive/ffi.py
++++ b/libarchive/ffi.py
+@@ -15,6 +15,7 @@ from ctypes.util import find_library
+ import logging
+ import mmap
+ import os
++import sys
+ 
+ from .exception import ArchiveError
+ 
+@@ -24,6 +25,12 @@ logger = logging.getLogger('libarchive')
+ page_size = mmap.PAGESIZE
+ 
+ libarchive_path = os.environ.get('LIBARCHIVE') or find_library('archive')
++if sys.platform == 'win32' and not libarchive_path:
++    libarchive_path = os.path.join(sys.prefix, 'Library', 'bin', 'libarchive.dll')
++elif sys.platform == 'darwin':
++    libarchive_path = os.path.join(sys.prefix, 'lib', 'libarchive.dylib')
++elif sys.platform.startswith('linux'):
++    libarchive_path = os.path.join(sys.prefix, 'lib', 'libarchive.so')
+ libarchive = ctypes.cdll.LoadLibrary(libarchive_path)
+ 
+ 
+-- 
+2.20.1
+

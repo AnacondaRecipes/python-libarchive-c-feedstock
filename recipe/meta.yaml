@@ -13,9 +13,10 @@ source:
   sha256: {{ sha256 }}
   patches:
     - 0001-Add-zstd-support.patch
+    - 0002-anaconda-win-library-bin-path.patch
 
 build:
-  number: 7
+  number: 8
 
 requirements:
   host:
