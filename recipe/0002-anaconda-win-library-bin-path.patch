@@ -1,14 +1,14 @@
-From 56b67e1cf788aae2d31e65cca5d477a6b5460278 Mon Sep 17 00:00:00 2001
+From 67c9cfa47836b156e465189591e7ff599dcdc375 Mon Sep 17 00:00:00 2001
 From: Mike Sarahan <msarahan@gmail.com>
 Date: Mon, 1 Jul 2019 09:35:31 -0500
 Subject: [PATCH] anaconda win library bin path
 
 ---
- libarchive/ffi.py | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+ libarchive/ffi.py | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
 
 diff --git a/libarchive/ffi.py b/libarchive/ffi.py
-index 755eb71..2f32aba 100644
+index 755eb71..8285d9f 100644
 --- a/libarchive/ffi.py
 +++ b/libarchive/ffi.py
 @@ -15,6 +15,7 @@ from ctypes.util import find_library
@@ -19,21 +19,23 @@ index 755eb71..2f32aba 100644
  
  from .exception import ArchiveError
  
-@@ -23,9 +24,19 @@ logger = logging.getLogger('libarchive')
+@@ -23,9 +24,21 @@ logger = logging.getLogger('libarchive')
  
  page_size = mmap.PAGESIZE
  
 +backup_PATH = os.environ['PATH']
  libarchive_path = os.environ.get('LIBARCHIVE') or find_library('archive')
 +if not libarchive_path:
++    new_path = None
 +    if sys.platform == 'win32' and not libarchive_path:
 +        new_path = os.path.join(sys.prefix, 'Library', 'bin')
 +    elif sys.platform == 'darwin':
-+        libarchive_path = os.path.join(sys.prefix, 'lib')
++        new__path = os.path.join(sys.prefix, 'lib')
 +    elif sys.platform.startswith('linux'):
-+        new_path_path = os.path.join(sys.prefix, 'lib')
-+    os.environ['PATH'] = os.pathsep.join((new_path, backup_PATH))
-+    libarchive_path = find_library('archive')
++        new_path = os.path.join(sys.prefix, 'lib')
++    if new_path:
++        os.environ['PATH'] = os.pathsep.join((new_path, backup_PATH))
++        libarchive_path = find_library('archive')
  libarchive = ctypes.cdll.LoadLibrary(libarchive_path)
 -
 +os.environ['PATH'] = backup_PATH
@@ -41,5 +43,5 @@ index 755eb71..2f32aba 100644
  # Constants
  
 -- 
-2.22.0
+2.20.1
 
