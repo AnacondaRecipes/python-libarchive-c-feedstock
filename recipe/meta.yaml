@@ -16,7 +16,7 @@ source:
     - 0002-anaconda-win-library-bin-path.patch
 
 build:
-  number: 9
+  number: 10
 
 requirements:
   host:

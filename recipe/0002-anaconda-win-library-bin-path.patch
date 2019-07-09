@@ -1,4 +1,4 @@
-From 67c9cfa47836b156e465189591e7ff599dcdc375 Mon Sep 17 00:00:00 2001
+From 7fbfbdbcc787b0690fff60f259f00f84f8988f63 Mon Sep 17 00:00:00 2001
 From: Mike Sarahan <msarahan@gmail.com>
 Date: Mon, 1 Jul 2019 09:35:31 -0500
 Subject: [PATCH] anaconda win library bin path
@@ -8,7 +8,7 @@ Subject: [PATCH] anaconda win library bin path
  1 file changed, 14 insertions(+), 1 deletion(-)
 
 diff --git a/libarchive/ffi.py b/libarchive/ffi.py
-index 755eb71..8285d9f 100644
+index 755eb71..8629288 100644
 --- a/libarchive/ffi.py
 +++ b/libarchive/ffi.py
 @@ -15,6 +15,7 @@ from ctypes.util import find_library
@@ -23,7 +23,7 @@ index 755eb71..8285d9f 100644
  
  page_size = mmap.PAGESIZE
  
-+backup_PATH = os.environ['PATH']
++backup_PATH = os.environ.get('PATH', "")
  libarchive_path = os.environ.get('LIBARCHIVE') or find_library('archive')
 +if not libarchive_path:
 +    new_path = None
@@ -43,5 +43,5 @@ index 755eb71..8285d9f 100644
  # Constants
  
 -- 
-2.20.1
+2.22.0
 
