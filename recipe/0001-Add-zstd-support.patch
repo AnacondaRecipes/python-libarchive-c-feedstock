@@ -1,7 +1,17 @@
-diff -urN libarchive-c-2.8.orig/libarchive/ffi.py libarchive-c-2.8/libarchive/ffi.py
---- libarchive-c-2.8.orig/libarchive/ffi.py	2018-09-21 19:01:52.000000000 +0100
-+++ libarchive-c-2.8/libarchive/ffi.py	2018-09-21 19:02:25.000000000 +0100
-@@ -167,7 +167,7 @@
+From 5f3c0b407c38c635172633209b0d79c9179a28d6 Mon Sep 17 00:00:00 2001
+From: Jonathan Helmus <jjhelmus@gmail.com>
+Date: Wed, 17 Jul 2019 10:04:50 -0500
+Subject: [PATCH 1/2] Add zstd support
+
+---
+ libarchive/ffi.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/libarchive/ffi.py b/libarchive/ffi.py
+index 755eb71..698d6ba 100644
+--- a/libarchive/ffi.py
++++ b/libarchive/ffi.py
+@@ -167,7 +167,7 @@ for f_name in list(READ_FORMATS):
  
  READ_FILTERS = set((
      'all', 'bzip2', 'compress', 'grzip', 'gzip', 'lrzip', 'lzip', 'lzma',
@@ -10,7 +20,7 @@ diff -urN libarchive-c-2.8.orig/libarchive/ffi.py libarchive-c-2.8/libarchive/ff
  ))
  for f_name in list(READ_FILTERS):
      try:
-@@ -229,7 +229,7 @@
+@@ -229,7 +229,7 @@ for f_name in list(WRITE_FORMATS):
  
  WRITE_FILTERS = set((
      'b64encode', 'bzip2', 'compress', 'grzip', 'gzip', 'lrzip', 'lzip', 'lzma',
@@ -19,3 +29,6 @@ diff -urN libarchive-c-2.8.orig/libarchive/ffi.py libarchive-c-2.8/libarchive/ff
  ))
  for f_name in list(WRITE_FILTERS):
      try:
+-- 
+2.17.1
+
