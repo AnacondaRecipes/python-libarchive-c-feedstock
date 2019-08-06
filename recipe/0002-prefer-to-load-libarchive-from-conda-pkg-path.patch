@@ -1,17 +1,20 @@
-From d152694a8cf1975e18e24dcf6efd815a66d34ff4 Mon Sep 17 00:00:00 2001
+From b48d0fc7397539bfe27e560f92c20ebd45515391 Mon Sep 17 00:00:00 2001
 From: Jonathan Helmus <jjhelmus@gmail.com>
 Date: Wed, 17 Jul 2019 10:47:03 -0500
-Subject: [PATCH 2/2] prefer to load libarchive from conda pkg path
+Subject: [PATCH] prefer to load libarchive from conda pkg path
 
 Preferentially load libarchive from the platform depend path used in
 the libarchive conda packages. The LIBARCHIVE environment variable can
 be used to override this check by providing an alternative location.
+
+This also implements some exception handling that should be better than
+the str/unicode nonetype message that people see right now.
 ---
- libarchive/ffi.py | 23 ++++++++++++++++++++++-
- 1 file changed, 22 insertions(+), 1 deletion(-)
+ libarchive/ffi.py | 35 +++++++++++++++++++++++++++++++++--
+ 1 file changed, 33 insertions(+), 2 deletions(-)
 
 diff --git a/libarchive/ffi.py b/libarchive/ffi.py
-index 698d6ba..004dc2a 100644
+index 698d6ba..bc9809c 100644
 --- a/libarchive/ffi.py
 +++ b/libarchive/ffi.py
 @@ -15,6 +15,7 @@ from ctypes.util import find_library
@@ -22,19 +25,23 @@ index 698d6ba..004dc2a 100644
  
  from .exception import ArchiveError
  
-@@ -23,7 +24,27 @@ logger = logging.getLogger('libarchive')
+@@ -23,8 +24,38 @@ logger = logging.getLogger('libarchive')
  
  page_size = mmap.PAGESIZE
  
 -libarchive_path = os.environ.get('LIBARCHIVE') or find_library('archive')
+-libarchive = ctypes.cdll.LoadLibrary(libarchive_path)
 +# libarchive path order:
 +# * path specified by the LIBARCHIVE environment variable
 +# * platform dependent location used in conda packages
 +# * location determined by find_library
 +libarchive_path = os.environ.get('LIBARCHIVE')
++backup_path = os.environ['PATH']
 +if libarchive_path is None:
 +    if sys.platform == 'win32':
-+        test_path = os.path.join(sys.prefix, 'Library', 'bin', 'archive.dll')
++        library_bin = os.path.join(sys.prefix, 'Library', 'bin')
++        test_path = os.path.join(library_bin, 'archive.dll')
++        os.environ['PATH'] = "%s;%s" % (library_bin, backup_path)
 +    elif sys.platform == 'darwin':
 +        test_path = os.path.join(sys.prefix, 'lib', 'libarchive.dylib')
 +    elif sys.platform.startswith('linux'):
@@ -48,9 +55,17 @@ index 698d6ba..004dc2a 100644
 +        libarchive_path = None
 +if libarchive_path is None:
 +    libarchive_path = find_library('archive')
- libarchive = ctypes.cdll.LoadLibrary(libarchive_path)
++if not libarchive_path:
++    raise ImportError("Failed to find libarchive library")
++try:
++    libarchive = ctypes.cdll.LoadLibrary(libarchive_path)
++except:
++    raise ImportError("Failed to load libarchive library from %s - are any dependencies missing?"
++                      "Is your environment activated?")
++os.environ['PATH'] = backup_path
  
  
+ # Constants
 -- 
-2.17.1
+2.22.0
 

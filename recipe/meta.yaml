@@ -16,7 +16,7 @@ source:
     - 0002-prefer-to-load-libarchive-from-conda-pkg-path.patch
 
 build:
-  number: 11
+  number: 12
 
 requirements:
   host:
