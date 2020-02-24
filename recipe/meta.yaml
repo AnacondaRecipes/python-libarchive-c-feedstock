@@ -16,7 +16,7 @@ source:
     - 0002-prefer-to-load-libarchive-from-conda-pkg-path.patch
 
 build:
-  number: 13
+  number: 14
 
 requirements:
   host:
@@ -27,12 +27,15 @@ requirements:
     - python
 
 test:
+  files:
+    - test/*
   imports:
     - libarchive
 
 about:
   home: https://github.com/Changaco/python-libarchive-c
   license: CC0-1.0
+  license_file: cc0-1.0.txt
   summary: Python interface to libarchive
 
 extra:
