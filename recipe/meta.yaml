@@ -29,13 +29,16 @@ source:
     - 0002-prefer-to-load-libarchive-from-conda-pkg-path.patch
 
 build:
-  number: 0
+  number: 1
   noarch: python
   script:
     - rd /s /q tests  # [win]
     - "{{ PYTHON }} -m pip install . -vv"
 
 requirements:
+  build:
+    - m2-patch                    # [win]
+    - patch                       # [not win]
   host:
     - pip
     - python
