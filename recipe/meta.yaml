@@ -29,7 +29,7 @@ source:
     - 0002-prefer-to-load-libarchive-from-conda-pkg-path.patch
 
 build:
-  number: 1
+  number: 2
   noarch: python
   script:
     - rd /s /q tests  # [win]
