@@ -13,7 +13,7 @@ source:
 
 build:
   number: 0
-  skip: True  # [py<38]
+  noarch: python
   script:
     - rd /s /q tests  # [win]
     - "{{ PYTHON }} -m pip install . -vv"
