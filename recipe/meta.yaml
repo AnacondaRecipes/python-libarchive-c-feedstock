@@ -15,10 +15,15 @@ build:
   number: 0
   noarch: python
   script:
-    - rd /s /q tests  # [win]
-    - "{{ PYTHON }} -m pip install . -vv"
+    - {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+    # https://github.com/conda-forge/python-libarchive-c-feedstock/issues/35
+    - cd {{ RECIPE_DIR }}
+    - {{ PYTHON }} delete_unicode_files.py
+  skip: true  # [py<38]
 
 requirements:
+  build:
+    - python
   host:
     - pip
     - python
