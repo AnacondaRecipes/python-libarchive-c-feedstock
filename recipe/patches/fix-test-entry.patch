@@ -1,0 +1,27 @@
+From 8e9819587b51938062d1cf1c2611ffeff66ec6a2 Mon Sep 17 00:00:00 2001
+From: Patryk Kups <pkups@anaconda.com>
+Date: Tue, 27 Jan 2026 13:08:32 +0100
+Subject: [PATCH] patch
+
+---
+ tests/test_entry.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tests/test_entry.py b/tests/test_entry.py
+index 7c8afa7..29feccb 100644
+--- a/tests/test_entry.py
++++ b/tests/test_entry.py
+@@ -163,8 +163,8 @@ fake_hashes = dict(
+ mtree = (
+     '#mtree\n'
+     './empty.txt nlink=0 time=0.0 mode=664 gid=0 uid=0 type=file size=42 '
+-    f'md5digest={'21'*16} rmd160digest={'21'*20} sha1digest={'21'*20} '
+-    f'sha256digest={'21'*32} sha384digest={'21'*48} sha512digest={'21'*64}\n'
++    f"md5digest={'21'*16} rmd160digest={'21'*20} sha1digest={'21'*20} "
++    f"sha256digest={'21'*32} sha384digest={'21'*48} sha512digest={'21'*64}\n"
+ )
+ 
+ 
+-- 
+2.39.5 (Apple Git-154)
+
