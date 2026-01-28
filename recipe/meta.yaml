@@ -30,28 +30,20 @@ requirements:
     - libarchive
     - python
 
-{% set tests_to_deselect = "" %}
+{% set tests_to_deselect = "" %}  # [unix]
 # FAILED FileNotFoundError: [Errno 2] No such file or directory: '$SRC_DIR/tests/data/프로그램.zip.json'
-{% set tests_to_deselect = "--deselect=tests/test_entry.py::test_check_archiveentry_with_unicode_entries_and_name_zip" %}
+{% set tests_to_deselect = "--deselect=tests/test_entry.py::test_check_archiveentry_with_unicode_entries_and_name_zip" %}  # [unix]
 # FAILED tests/test_entry.py::test_writing_entry_digests - AssertionError: assert '#mtree\n./empty.txt nlink=0 time=0.0 mode=664 gid=0 uid=0 type=file size=42 md5digest=...
 {% set tests_to_deselect = tests_to_deselect + " --deselect=tests/test_entry.py::test_writing_entry_digests" %}  # [osx]
  # archive.add_files('symlink-to-empty', symlink_mode='hybrid')
 # E  Failed: DID NOT RAISE <class 'libarchive.exception.ArchiveError'>
 {% set tests_to_deselect = tests_to_deselect + " --deselect=tests/test_rwx.py::test_symlinks" %}  # [linux]
 # E           libarchive.exception.ArchiveError: LSARPC_ENDPOINT: Couldn't visit directory (errno=2, retcode=-25, archive_p=2633264618528)
-{% set tests_to_ignore = "" %}
-{% set tests_to_ignore = tests_to_ignore + " --ignore=tests/test_rwx.py --ignore=tests/test_atime_mtime_ctime.py" %}  # [win]
-{% set tests_to_deselect = tests_to_deselect + " --deselect=tests/test_convert.py::test_convert" %}  # [win]
-# AssertionError: assert {'path': 'ustar/umlauts-─╓▄Σ÷ⁿ▀', 'mtime': 1041808783, 'size': 7011, 'mode': 'rw-r--r--', 'isreg': 
-# True, 'isdir': False, 'islnk': False, 'issym': False, 'linkpath': None, 'isblk': False, 'ischr': False, 'isfifo': False, 'isdev': False, 'uid
-{% set tests_to_deselect = tests_to_deselect + " --deselect=tests/test_entry.py::test_check_archiveentry_using_python_testtar" %}  # [win]
-# E       OSError: [WinError 1314] A required privilege is not held by the client: 'empty' -> 'symlink-to-empty'
-{% set tests_to_ignore = tests_to_ignore + " --ignore=tests/test_security_flags.py" %}  # [win]
 
 test:
   source_files:
     - tests
-    - README.rst
+    - README.rsts
   files:
     - test/hello_world.xar
   imports:
@@ -63,7 +55,7 @@ test:
     - python -c "import libarchive; libarchive.extract_file('test/hello_world.xar')"  # [unix]
     - python -c "import libarchive; libarchive.extract_file('test\\hello_world.xar')"  # [win]
     - python -c "import os, shutil, libarchive; shutil.copytree(os.path.dirname(libarchive.__file__), 'libarchive')"
-    - pytest -vv --cov libarchive {{ tests_to_deselect }} {{ tests_to_ignore }}
+    - pytest -vv --cov libarchive {{ tests_to_deselect }} # [unix]
 
 about:
   home: https://github.com/Changaco/python-libarchive-c
