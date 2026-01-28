@@ -43,7 +43,7 @@ requirements:
 test:
   source_files:
     - tests
-    - README.rsts
+    - README.rst
   files:
     - test/hello_world.xar
   imports:
