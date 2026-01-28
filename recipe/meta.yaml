@@ -42,8 +42,8 @@ requirements:
 
 test:
   source_files:
-    - tests
-    - README.rst
+    - tests  # [unix]
+    - README.rst  # [unix]
   files:
     - test/hello_world.xar
   imports:

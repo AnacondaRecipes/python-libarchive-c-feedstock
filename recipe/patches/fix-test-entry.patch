@@ -1,7 +1,7 @@
 From 8e9819587b51938062d1cf1c2611ffeff66ec6a2 Mon Sep 17 00:00:00 2001
 From: Patryk Kups <pkups@anaconda.com>
 Date: Tue, 27 Jan 2026 13:08:32 +0100
-Subject: [PATCH] patch
+Subject: [PATCH] fix test entry
 
 ---
  tests/test_entry.py | 4 ++--
