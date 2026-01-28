@@ -26,7 +26,6 @@ requirements:
     - pip
     - python
     - setuptools
-    - libarchive {{ libarchive }}
   run:
     - libarchive
     - python
