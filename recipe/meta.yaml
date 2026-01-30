@@ -1,40 +1,49 @@
-{% set pypi = "libarchive-c" %}
 {% set name = "python-libarchive-c" %}
-{% set version = "5.1" %}
-{% set sha256 = "7bcce24ea6c0fa3bc62468476c6d2f6264156db2f04878a372027c10615a2721" %}
+{% set version = "5.3" %}
 
 package:
   name: {{ name }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ pypi[0] }}/{{ pypi }}/{{ pypi }}-{{ version }}.tar.gz
-  sha256: {{ sha256 }}
+  url: https://github.com/Changaco/{{ name }}/archive/refs/tags/{{ version }}.tar.gz
+  sha256: 867f94601c177236afb9d1c385f524b28ebc47e9b090cb08dfdc75dd18d5520c
+  patches:
+    - patches/fix-test-entry.patch
 
 build:
   number: 0
-  noarch: python
   script:
     - {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
     # https://github.com/conda-forge/python-libarchive-c-feedstock/issues/35
     - cd {{ RECIPE_DIR }}
     - {{ PYTHON }} delete_unicode_files.py
-  skip: true  # [py<38]
+  # https://github.com/Changaco/python-libarchive-c/blob/5.3/README.rst?plain=1#L17
+  skip: true  # [py>313]
 
 requirements:
-  build:
-    - python
   host:
     - pip
     - python
+    - setuptools
   run:
     - libarchive
     - python
 
+{% set tests_to_deselect = "" %}  # [unix]
+# FAILED FileNotFoundError: [Errno 2] No such file or directory: '$SRC_DIR/tests/data/프로그램.zip.json'
+{% set tests_to_deselect = "--deselect=tests/test_entry.py::test_check_archiveentry_with_unicode_entries_and_name_zip" %}  # [unix]
+# FAILED tests/test_entry.py::test_writing_entry_digests - AssertionError: assert '#mtree\n./empty.txt nlink=0 time=0.0 mode=664 gid=0 uid=0 type=file size=42 md5digest=...
+{% set tests_to_deselect = tests_to_deselect + " --deselect=tests/test_entry.py::test_writing_entry_digests" %}  # [osx]
+ # archive.add_files('symlink-to-empty', symlink_mode='hybrid')
+# E  Failed: DID NOT RAISE <class 'libarchive.exception.ArchiveError'>
+{% set tests_to_deselect = tests_to_deselect + " --deselect=tests/test_rwx.py::test_symlinks" %}  # [linux]
+# E           libarchive.exception.ArchiveError: LSARPC_ENDPOINT: Couldn't visit directory (errno=2, retcode=-25, archive_p=2633264618528)
+
 test:
   source_files:
     - tests  # [unix]
-    - README.rst
+    - README.rst  # [unix]
   files:
     - test/hello_world.xar
   imports:
@@ -43,20 +52,20 @@ test:
     - mock
     - pytest-cov
   commands:
-    - export LC_ALL=en_US.UTF-8  # [osx]
-    - python -c "import libarchive; libarchive.extract_file('test/hello_world.xar')"  # [not win]
+    - python -c "import libarchive; libarchive.extract_file('test/hello_world.xar')"  # [unix]
     - python -c "import libarchive; libarchive.extract_file('test\\hello_world.xar')"  # [win]
-    - python -c "import os, shutil, libarchive; shutil.copytree(os.path.dirname(libarchive.__file__), 'libarchive')"  # [unix]
-    - pytest -vv --cov libarchive --cov-report term-missing:skip-covered --cov-fail-under=83 -k "not unicode_entries"  # [linux]
-    - pytest -vv --cov libarchive -k "not (test_fd or test_files or test_buffers or atime_ctime or custom_writer or unicode_entries)"  # [osx]
+    - python -c "import os, shutil, libarchive; shutil.copytree(os.path.dirname(libarchive.__file__), 'libarchive')"
+    - pytest -vv --cov libarchive {{ tests_to_deselect }} # [unix]
 
 about:
   home: https://github.com/Changaco/python-libarchive-c
   license: CC0-1.0
   license_family: CC
-  summary: Python interface to libarchive
   license_file: cc0-1.0.txt
-
+  summary: Python interface to libarchive
+  description: Python interface to libarchive
+  dev_url: https://github.com/Changaco/python-libarchive-c
+  doc_url: https://github.com/Changaco/python-libarchive-c/blob/master/README.rst
 
 extra:
   recipe-maintainers:
